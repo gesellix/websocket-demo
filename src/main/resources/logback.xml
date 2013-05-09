@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+  <property name="logPattern" value="%d{ISO8601} [%thread] %-5level %X{loanFileNr} %logger{36} - %m%n"/>
+
+  <insertFromJNDI env-entry-name="java:comp/env/logDir" as="logDir"/>
+  <if condition='isNull("logDir")'>
+    <then>
+      <property name="logDir" value="${catalina.base}/logs"/>
+    </then>
+  </if>
+  <property name="logFilePrefix" value="${logDir}/websocket-demo"/>
+
+  <appender name="all-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${logFilePrefix}-all.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${logFilePrefix}-all.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>${logPattern}%ex{short}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="error-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${logFilePrefix}-error.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${logFilePrefix}-error.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>ERROR</level>
+    </filter>
+    <encoder>
+      <pattern>${logPattern}%rEx</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="de.gesellix" level="DEBUG"/>
+
+  <logger name="org.springframework" level="INFO"/>
+
+  <root level="OFF">
+    <appender-ref ref="error-file"/>
+    <appender-ref ref="all-file"/>
+  </root>
+</configuration>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html ng-app="websocketDemo">
+<head>
+    <title>Websocket Demo</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.4/angular.min.js"></script>
+    <script type="text/javascript" src="resources/js/jquery.atmosphere.js"></script>
+    <script type="text/javascript" src="resources/js/angular-app.js"></script>
+</head>
+<body class="ng-scope">
+<div ng-controller="entryController">
+    <ul>
+        <li ng-repeat="entry in entries | orderBy:'id'">
+            <div>
+                <i>{{entry.id}}</i>
+                <span>{{entry.text}}</span>
+            </div>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
