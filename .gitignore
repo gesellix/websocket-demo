@@ -2,3 +2,4 @@
 *.iml
 target/
 logDir_IS_UNDEFINED/
+node_modules

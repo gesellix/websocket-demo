@@ -1,0 +1,12 @@
+{
+  "name": "websocket-demo",
+  "description": "websocket-demo with socket.io",
+  "author": "gesellix",
+  "version": "0.0.1",
+  "dependencies": {
+    "pouchdb-server": "~0.1.5",
+    "socket.io": "~0.9.14"
+  },
+  "devDependencies": {},
+  "engine": "node >= 0.10.0"
+}
