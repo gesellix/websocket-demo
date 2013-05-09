@@ -7,8 +7,12 @@
     <script type="text/javascript" src="resources/js/jquery.atmosphere.js"></script>
     <script type="text/javascript" src="resources/js/angular-app.js"></script>
 </head>
-<body class="ng-scope">
+<body>
 <div ng-controller="entryController">
+    <ul>
+        <li>transport: {{transport}}</li>
+        <li>uuid: {{uuid}}</li>
+    </ul>
     <ul>
         <li ng-repeat="entry in entries | orderBy:'id'">
             <div>

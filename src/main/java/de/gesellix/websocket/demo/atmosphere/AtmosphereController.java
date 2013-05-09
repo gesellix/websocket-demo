@@ -6,26 +6,22 @@ import org.atmosphere.cpr.AtmosphereResource;
 import org.atmosphere.cpr.AtmosphereResource.TRANSPORT;
 import org.atmosphere.cpr.AtmosphereResourceFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 
-import static org.atmosphere.cpr.ApplicationConfig.SUSPENDED_ATMOSPHERE_RESOURCE_UUID;
-
 @Controller
 @RequestMapping
 public class AtmosphereController {
-
-  // TODO user-/browser-specific
-  private String uuid;
 
   @ResponseBody
   @RequestMapping(value = "/atmosphere", method = RequestMethod.GET)
   public void onRequest(AtmosphereResource atmosphereResource) throws IOException {
     AtmosphereRequest atmosphereRequest = atmosphereResource.getRequest();
-    uuid = (String) atmosphereRequest.getAttribute(SUSPENDED_ATMOSPHERE_RESOURCE_UUID);
+    //uuid = (String) atmosphereRequest.getAttribute(SUSPENDED_ATMOSPHERE_RESOURCE_UUID);
 
     if (atmosphereRequest.getHeader("negotiating") == null) {
       atmosphereResource.resumeOnBroadcast(atmosphereResource.transport() == TRANSPORT.LONG_POLLING).suspend();
@@ -49,8 +45,8 @@ public class AtmosphereController {
   }
 
   @ResponseBody
-  @RequestMapping(value = "/broadcast", method = RequestMethod.GET)
-  public void broadcast() throws IOException {
+  @RequestMapping(value = "/broadcast/{uuid}", method = RequestMethod.GET)
+  public void broadcast(@PathVariable(value = "uuid") String uuid) throws IOException {
     String testdata = IOUtils.toString(getClass().getResource("testdata-partial.json"));
 
     AtmosphereResource resource = AtmosphereResourceFactory.getDefault().find(uuid);

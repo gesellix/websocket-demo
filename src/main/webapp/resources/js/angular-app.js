@@ -17,8 +17,13 @@
                     };
 
                     $scope.entries = [];
+                    $scope.uuid = "unknown";
+                    $scope.transport = "unknown";
                     atmosphere.onMessage(onMessageReceived);
-                    atmosphere.promise.then(function () {
+                    atmosphere.promise.then(function (data) {
+                      $scope.uuid = data.uuid;
+                      $scope.transport = data.transport;
+
                       atmosphere.emit({query: 'all'});
                     });
                   })
@@ -70,7 +75,10 @@
                    if (_request.isOpen) {
                      // force $digest
                      $rootScope.$apply(function () {
-                       _defer.resolve("onOpen");
+                       _defer.resolve({
+                                        "uuid": response.request.uuid,
+                                        "transport": response.transport
+                                      });
                      });
                    }
                  };
