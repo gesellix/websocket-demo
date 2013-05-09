@@ -4,15 +4,25 @@
     <title>Websocket Demo</title>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.4/angular.min.js"></script>
-    <script type="text/javascript" src="resources/js/jquery.atmosphere.js"></script>
+    <script type="text/javascript" src="resources/js/atmosphere/jquery.atmosphere.js"></script>
+    <script type="text/javascript" src="resources/js/socketio/socket.io.js"></script>
     <script type="text/javascript" src="resources/js/angular-app.js"></script>
 </head>
 <body>
 <div ng-controller="entryController">
+    <p>Connection</p>
     <ul>
-        <li>transport: {{transport}}</li>
-        <li>uuid: {{uuid}}</li>
+        <p>Atmosphere</p>
+        <ul>
+            <li>transport: {{transport}}</li>
+            <li>uuid: {{uuid}}</li>
+        </ul>
+        <p>Socket.IO</p>
+        <ul>
+            <li>transport: {{socketio}}</li>
+        </ul>
     </ul>
+    <p>What it's all about</p>
     <ul>
         <li ng-repeat="entry in entries | orderBy:'id'">
             <div>

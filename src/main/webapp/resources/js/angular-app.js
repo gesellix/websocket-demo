@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('websocketDemo', [])
-      .controller('entryController', function ($scope, $timeout, atmosphere) {
+      .controller('entryController', function ($scope, $timeout, atmosphere, socketio) {
                     var onMessageReceived = function (data) {
                       // force $digest
                       $scope.$apply(function () {
@@ -19,6 +19,8 @@
                     $scope.entries = [];
                     $scope.uuid = "unknown";
                     $scope.transport = "unknown";
+                    $scope.socketio = "unknown";
+
                     atmosphere.onMessage(onMessageReceived);
                     atmosphere.promise.then(function (data) {
                       $scope.uuid = data.uuid;
@@ -26,30 +28,35 @@
 
                       atmosphere.emit({query: 'all'});
                     });
+
+                    //socketio.emit('subscribe', "MeMyselfAndI");
+                    socketio.on('anotherTopic', function (data) {
+                      $scope.socketio = data;
+                    });
                   })
-//      .factory('socketio', function ($rootScope) {
-//                 var socket = io.connect('http://localhost');
-//                 return {
-//                   on: function (eventName, callback) {
-//                     socket.on(eventName, function () {
-//                       var args = arguments;
-//                       $rootScope.$apply(function () {
-//                         callback.apply(socket, args);
-//                       });
-//                     });
-//                   },
-//                   emit: function (eventName, data, callback) {
-//                     socket.emit(eventName, data, function () {
-//                       var args = arguments;
-//                       $rootScope.$apply(function () {
-//                         if (callback) {
-//                           callback.apply(socket, args);
-//                         }
-//                       });
-//                     })
-//                   }
-//                 }
-//               })
+      .factory('socketio', function ($rootScope) {
+                 var socket = io.connect('http://localhost:8081');
+                 return {
+                   on: function (eventName, callback) {
+                     socket.on(eventName, function () {
+                       var args = arguments;
+                       $rootScope.$apply(function () {
+                         callback.apply(socket, args);
+                       });
+                     });
+                   },
+                   emit: function (eventName, data, callback) {
+                     socket.emit(eventName, data, function () {
+                       var args = arguments;
+                       $rootScope.$apply(function () {
+                         if (callback) {
+                           callback.apply(socket, args);
+                         }
+                       });
+                     })
+                   }
+                 }
+               })
       .factory('atmosphere', function ($q, $rootScope) {
 
                  var _defer = $q.defer();
