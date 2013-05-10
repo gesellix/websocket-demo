@@ -34,10 +34,8 @@ You should see an overview on both websocket connections and initial data with 4
 The code isn't clean.
 The code isn't stable.
 
-
 There is no error handling.
 There aren't any tests.
-
 Both will be added soon.
 
 Useful hints are always welcome!
