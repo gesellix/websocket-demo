@@ -1,129 +1,50 @@
 (function () {
   'use strict';
 
-  angular.module('websocketDemo', [])
-      .controller('entryController', function ($scope, $timeout, atmosphere, socketio) {
-                    var onMessageReceived = function (data) {
-                      // force $digest
-                      $scope.$apply(function () {
-                        var message = $.parseJSON(data.responseBody);
-                        if (message.isPartialUpdate !== "undefined" && message.isPartialUpdate === true) {
-                          $scope.entries.push(message.entry);
-                        }
-                        else {
-                          $scope.entries = message;
-                        }
+  angular.module('websocketDemo', ['atmosphere', 'socketio'])
+      .controller('atmosphereController', function ($scope, $http, atmosphere) {
+
+                    var initialEntriesReceived = function (initialEntries) {
+                      $scope.entries = initialEntries;
+
+                      atmosphere.onMessage(function (data) {
+                        // force $digest
+                        $scope.$apply(function () {
+                          var message = $.parseJSON(data.responseBody);
+//                          if (message.isPartialUpdate !== "undefined" && message.isPartialUpdate === true) {
+                            $scope.entries.push(message.entry);
+                        });
+                      });
+                      atmosphere.promise.then(function (data) {
+                        $scope.connection = {"uuid": data.uuid, "transport": data.transport };
+//                        atmosphere.emit({query: 'all'});
                       });
                     };
 
-                    $scope.entries = [];
-                    $scope.uuid = "unknown";
-                    $scope.transport = "unknown";
-                    $scope.socketio = "unknown";
-
-                    atmosphere.onMessage(onMessageReceived);
-                    atmosphere.promise.then(function (data) {
-                      $scope.uuid = data.uuid;
-                      $scope.transport = data.transport;
-
-                      atmosphere.emit({query: 'all'});
-                    });
-
-                    //socketio.emit('subscribe', "MeMyselfAndI");
-                    socketio.on('anotherTopic', function (data) {
-                      $scope.socketio = data;
-                    });
+                    $scope.connection = {"uuid": "unknown", "transport": "connecting..." };
+                    $scope.entries = $http.get('/entries').success(initialEntriesReceived);
+                    $scope.triggerServerPush = function () {
+                      $http.get('/entries/triggerAtmospherePush/' + $scope.connection.uuid);
+                    }
                   })
-      .factory('socketio', function ($rootScope) {
-                 var socket = io.connect('http://localhost:8081');
-                 return {
-                   on: function (eventName, callback) {
-                     socket.on(eventName, function () {
-                       var args = arguments;
-                       $rootScope.$apply(function () {
-                         callback.apply(socket, args);
-                       });
-                     });
-                   },
-                   emit: function (eventName, data, callback) {
-                     socket.emit(eventName, data, function () {
-                       var args = arguments;
-                       $rootScope.$apply(function () {
-                         if (callback) {
-                           callback.apply(socket, args);
-                         }
-                       });
-                     })
-                   }
-                 }
-               })
-      .factory('atmosphere', function ($q, $rootScope) {
+      .controller('socketioController', function ($scope, $http, socketio) {
 
-                 var _defer = $q.defer();
+                    var initialEntriesReceived = function (initialEntries) {
+                      $scope.entries = initialEntries;
 
-                 var socket = $.atmosphere;
-                 var subscribedSocket = null;
+                      socketio.emit('subscribe', "MeMyselfAndI");
+                      socketio.on('subscribed', function (data) {
+                        $scope.connection = {"uuid": data.uuid, "transport": data.transport };
+                      });
+                      socketio.on('addEntry', function (data) {
+                        $scope.entries.push(data.entry);
+                      });
+                    };
 
-                 var _request = {
-                   url: '/atmosphere',
-                   contentType: "application/json",
-                   logLevel: 'debug',
-                   transport: 'websocket',
-                   fallbackTransport: 'long-polling'};
-
-                 _request.onMessage = function (response) {
-                   if (typeof _request.onMessageCallback !== "undefined") {
-                     _request.onMessageCallback(response);
-                   }
-                 };
-
-                 _request.onOpen = function (response) {
-                   _request.isOpen = response.request.isOpen;
-                   if (_request.isOpen) {
-                     // force $digest
-                     $rootScope.$apply(function () {
-                       _defer.resolve({
-                                        "uuid": response.request.uuid,
-                                        "transport": response.transport
-                                      });
-                     });
-                   }
-                 };
-                 _request.onReconnect = function (request, response) {
-                   _request.isOpen = response.request.isOpen;
-                 };
-                 _request.onClose = function (response) {
-                   _request.isOpen = false;
-                 };
-                 _request.onError = function (response) {
-                   console.log("onError: " + $.stringifyJSON(response));
-                 };
-
-                 var _subscribe = function () {
-                   subscribedSocket = socket.subscribe(_request);
-                 };
-
-                 var _emit = function (data) {
-                   var dataAsString = $.stringifyJSON(data);
-                   if (_request.isOpen) {
-                     subscribedSocket.push(dataAsString);
-                   }
-                   else {
-                     console.log("cannot push yet, connection is not open.");
-//                     _subscribe();
-                   }
-                 };
-
-                 _subscribe();
-
-                 return {
-                   promise: _defer.promise,
-                   onMessage: function (callback) {
-                     _request.onMessageCallback = callback;
-                   },
-                   emit: function (data) {
-                     _emit(data);
-                   }
-                 }
-               });
+                    $scope.connection = {"uuid": "unknown", "transport": "connecting..." };
+                    $scope.entries = $http.get('/entries').success(initialEntriesReceived);
+                    $scope.triggerServerPush = function () {
+                      $http.get('http://localhost:8081/entries/triggerSocketioPush/' + $scope.connection.uuid);
+                    }
+                  })
 })();

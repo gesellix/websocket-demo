@@ -24,27 +24,29 @@ server.listen(port);
 io.sockets.on('connection', function (socket) {
 
   socket.on('subscribe', function (userId) {
-    setInterval(function () {
-      socket.emit('anotherTopic', 'ready');
-    }, 500);
+    var uuid = socket.id;
+    socket.emit('subscribed', {"uuid": uuid, "transport": "websocket"});
   });
+});
+
+app.get('/entries/triggerSocketioPush/:uuid', function (req, res) {
+  var uuid = req.params.uuid;
+  res.header('Access-Control-Allow-Origin', '*');
+  res.end();
+
+  var socket = io.sockets.socket(uuid);
+  socket.emit("addEntry", {"entry": {"id": 23, "text": "pushed via Socket.IO"}})
 });
 
 //A Route for Creating a 500 Error (Useful to keep around)
 app.get('/500', function (req, res) {
-  throw new Error('This is a 500 Error');
+  res.end("500");
 });
 
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('/*', function (req, res) {
   console.log(req.path);
-  throw new NotFound;
+  res.end("404");
 });
-
-function NotFound(msg) {
-  this.name = 'NotFound';
-  Error.call(this, msg);
-  Error.captureStackTrace(this, arguments.callee);
-}
 
 console.log('Listening on http://0.0.0.0:' + port);

@@ -2,35 +2,89 @@
 <html ng-app="websocketDemo">
 <head>
     <title>Websocket Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="resources/css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="resources/css/bootstrap-responsive.css" rel="stylesheet">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.4/angular.min.js"></script>
-    <script type="text/javascript" src="resources/js/atmosphere/jquery.atmosphere.js"></script>
-    <script type="text/javascript" src="resources/js/socketio/socket.io.js"></script>
-    <script type="text/javascript" src="resources/js/angular-app.js"></script>
+    <script src="resources/js/atmosphere/jquery.atmosphere.js"></script>
+    <script src="resources/js/atmosphere/atmosphere-service.js"></script>
+    <script src="resources/js/socketio/socket.io.js"></script>
+    <script src="resources/js/socketio/socketio-service.js"></script>
+    <script src="resources/js/angular-app.js"></script>
+    <script src="resources/js/bootstrap/bootstrap.js"></script>
 </head>
 <body>
-<div ng-controller="entryController">
-    <p>Connection</p>
-    <ul>
-        <p>Atmosphere</p>
-        <ul>
-            <li>transport: {{transport}}</li>
-            <li>uuid: {{uuid}}</li>
-        </ul>
-        <p>Socket.IO</p>
-        <ul>
-            <li>transport: {{socketio}}</li>
-        </ul>
-    </ul>
-    <p>What it's all about</p>
-    <ul>
-        <li ng-repeat="entry in entries | orderBy:'id'">
-            <div>
-                <i>{{entry.id}}</i>
-                <span>{{entry.text}}</span>
+<div class="container">
+    <div class="row-fluid">
+        <div class="span12">
+            <h1>Websocket Demo</h1>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span6" ng-controller="atmosphereController">
+            <div class="row-fluid">
+                <div class="span12">
+                    <h3>Atmosphere</h3>
+                    <h5>Connection info</h5>
+                    <dl class="dl-horizontal">
+                        <dt>transport</dt>
+                        <dd>{{connection.transport}}</dd>
+                        <dt>uuid</dt>
+                        <dd>{{connection.uuid}}</dd>
+                    </dl>
+                </div>
             </div>
-        </li>
-    </ul>
+            <div class="row-fluid">
+                <div class="span12">
+                    <h5>What it's all about</h5>
+                    <button class="btn" ng-click="triggerServerPush()">trigger server push</button>
+                    <p>Entries:</p>
+                    <ul>
+                        <li ng-repeat="entry in entries | orderBy:'id'">
+                            <div>
+                                <i>{{entry.id}}</i>
+                                <span>{{entry.text}}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="span6" ng-controller="socketioController">
+            <div class="row-fluid">
+                <div class="span12">
+                    <h3>Socket.IO</h3>
+                    <h5>Connection info</h5>
+                    <dl class="dl-horizontal">
+                        <dt>transport</dt>
+                        <dd>{{connection.transport}}</dd>
+                        <dt>uuid</dt>
+                        <dd>{{connection.uuid}}</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <h5>What it's all about</h5>
+                    <button class="btn" ng-click="triggerServerPush()">trigger server push</button>
+                    <p>Entries:</p>
+                    <ul>
+                        <li ng-repeat="entry in entries | orderBy:'id'">
+                            <div>
+                                <i>{{entry.id}}</i>
+                                <span>{{entry.text}}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+        </div>
+    </div>
 </div>
 </body>
 </html>
