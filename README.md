@@ -21,7 +21,9 @@ mvn org.mortbay.jetty:jetty-maven-plugin:8.1.10.v20130312:run
 The Socket.IO backend can be started using the provided server.js file:
 
 ```
-node /src/main/js/socketio/server.js
+cd ./src/main/js/socketio
+npm install
+node server.js
 ```
 
 After running the backend(s),  navigate to
@@ -34,8 +36,7 @@ You should see an overview on both websocket connections and initial data with 4
 The code isn't clean.
 The code isn't stable.
 
-There is no error handling.
-There aren't any tests.
-Both will be added soon.
+Erros will be seen.
+Tests should be possible.
 
 Useful hints are always welcome!
