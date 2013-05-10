@@ -14,15 +14,19 @@ Both frameworks live on the same web page, but have dedicated Angular controller
 Therefore, the codebase is tightly coupled (evil me), so that you have to configure and run at least the Java backend. It contains the Atmosphere example code and is used to deliver the static content for both frameworks.
 
 You can run the Java backend by using Jetty:
-```mvn org.mortbay.jetty:jetty-maven-plugin:8.1.10.v20130312:run
+```
+mvn org.mortbay.jetty:jetty-maven-plugin:8.1.10.v20130312:run
 ```
 
 The Socket.IO backend can be started using the provided server.js file:
-```node /src/main/js/socketio/server.js
+
+```
+node /src/main/js/socketio/server.js
 ```
 
 After running the backend(s),  navigate to
-```http://localhost:8080/index.html
+```
+http://localhost:8080/index.html
 ```
 You should see an overview on both websocket connections and initial data with 4 entries for each connection. Above the entry lists, you can use the buttons to trigger a server side push, so that new entries should appear in the lists.
 
