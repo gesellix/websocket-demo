@@ -1,0 +1,12 @@
+{
+  "name": "websocket-demo-testdata",
+  "description": "websocket-demo testdata db backend",
+  "author": "gesellix",
+  "version": "0.0.1",
+  "dependencies": {
+    "pouchdb": "0.0.12",
+    "pouchdb-server": "~0.1.5"
+  },
+  "devDependencies": {},
+  "engine": "node >= 0.10.0"
+}

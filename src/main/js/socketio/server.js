@@ -2,10 +2,6 @@ var express = require('express');
 var http = require('http');
 var socketIo = require('socket.io');
 var connect = require('connect');
-var pouchdbserver = require("pouchdb-server");
-var pouchdbclient = require("pouchdb");
-//pouchdbserver.listen(5985);
-//var db = Pouch("pouchtest");
 
 var app = express();
 
@@ -21,9 +17,8 @@ app.configure(function () {
 var server = http.createServer(app);
 var io = socketIo.listen(server);
 
-var port = 8081;
-
-server.listen(port);
+var appPort = 8081;
+server.listen(appPort);
 
 io.sockets.on('connection', function (socket) {
 
@@ -53,4 +48,4 @@ app.get('/*', function (req, res) {
   res.end("404");
 });
 
-console.log('App listening on http://0.0.0.0:' + port);
+console.log('App listening on http://0.0.0.0:' + appPort);
