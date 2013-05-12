@@ -2,8 +2,8 @@ var express = require('express');
 var http = require('http');
 var socketIo = require('socket.io');
 var connect = require('connect');
-//var pouchdbserver = require("pouchdb-server");
-//var pouchdbclient = require("pouchdb");
+var pouchdbserver = require("pouchdb-server");
+var pouchdbclient = require("pouchdb");
 //pouchdbserver.listen(5985);
 //var db = Pouch("pouchtest");
 
