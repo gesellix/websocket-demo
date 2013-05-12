@@ -18,8 +18,7 @@ public class EntriesController {
   @ResponseBody
   @RequestMapping(value = "/entries", method = RequestMethod.GET)
   public String getEntries() throws IOException {
-    String testdata = IOUtils.toString(getClass().getResource("testdata-initial.json"));
-    return testdata;
+    return IOUtils.toString(getClass().getResource("testdata-initial.json"));
   }
 
   @ResponseBody
@@ -28,6 +27,9 @@ public class EntriesController {
     String testdata = IOUtils.toString(getClass().getResource("testdata-partial.json"));
 
     AtmosphereResource resource = AtmosphereResourceFactory.getDefault().find(uuid);
-    resource.getBroadcaster().broadcast(testdata);
+    resource.getBroadcaster().broadcast(testdata, resource);
+
+//    Future<List<Broadcaster>> future = MetaBroadcaster.getDefault().broadcastTo(uuid, testdata);
+//    BroadcasterFactory.getDefault().lookup(uuid, true).broadcast(testdata);
   }
 }
