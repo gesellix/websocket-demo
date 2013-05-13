@@ -7,17 +7,18 @@
                     var initialEntriesReceived = function (initialEntries) {
                       $scope.entries = initialEntries;
 
+//                        atmosphere.emit({query: 'all'});
+
                       atmosphere.onMessage(function (data) {
                         // force $digest
                         $scope.$apply(function () {
                           var message = $.parseJSON(data.responseBody);
-//                          if (message.isPartialUpdate !== "undefined" && message.isPartialUpdate === true) {
-                            $scope.entries.push(message.entry);
+                          $scope.entries.push(message.entry);
                         });
                       });
-                      atmosphere.promise.then(function (data) {
+
+                      atmosphere.onConnect(function (data) {
                         $scope.connection = {"uuid": data.uuid, "transport": data.transport };
-//                        atmosphere.emit({query: 'all'});
                       });
                     };
 
@@ -32,10 +33,11 @@
                     var initialEntriesReceived = function (initialEntries) {
                       $scope.entries = initialEntries;
 
-                      socketio.emit('subscribe', "MeMyselfAndI");
                       socketio.on('subscribed', function (data) {
                         $scope.connection = {"uuid": data.uuid, "transport": data.transport };
                       });
+                      socketio.emit('subscribe', "MeMyselfAndI");
+
                       socketio.on('addEntry', function (data) {
                         $scope.entries.push(data.entry);
                       });

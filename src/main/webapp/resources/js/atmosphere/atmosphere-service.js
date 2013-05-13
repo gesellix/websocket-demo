@@ -62,7 +62,11 @@
                  _subscribe();
 
                  return {
-                   promise: _defer.promise,
+                   onConnect: function (callback) {
+                     _defer.promise.then(function (data) {
+                       callback(data);
+                     });
+                   },
                    onMessage: function (callback) {
                      _request.onMessageCallback = callback;
                    },
