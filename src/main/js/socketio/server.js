@@ -30,11 +30,12 @@ io.sockets.on('connection', function (socket) {
 
 app.get('/entries/triggerSocketioPush/:uuid', function (req, res) {
   var uuid = req.params.uuid;
+  var message = req.query["message"];
   res.header('Access-Control-Allow-Origin', '*');
   res.end();
 
   var socket = io.sockets.socket(uuid);
-  socket.emit("addEntry", {"entry": {"id": 23, "text": "pushed via Socket.IO"}})
+  socket.emit("addEntry", {"entry": {"id": 23, "text": message}})
 });
 
 //A Route for Creating a 500 Error (Useful to keep around)

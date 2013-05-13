@@ -38,7 +38,16 @@
             <div class="row-fluid">
                 <div class="span12">
                     <h5>What it's all about</h5>
-                    <button class="btn" ng-click="triggerServerPush()">trigger server push</button>
+
+                    <form class="form-inline">
+                        <div class="controls input-append">
+                            <input type="text" placeholder="target uuid" ng-model="uuid"/>
+                        </div>
+                        <div class="controls input-append">
+                            <input type="text" placeholder="message" ng-model="message"/>
+                            <button class="btn" ng-click="triggerServerPush()">trigger server push</button>
+                        </div>
+                    </form>
                     <p>Entries:</p>
                     <ul>
                         <li ng-repeat="entry in entries | orderBy:'id'">
@@ -67,7 +76,16 @@
             <div class="row-fluid">
                 <div class="span12">
                     <h5>What it's all about</h5>
-                    <button class="btn" ng-click="triggerServerPush()">trigger server push</button>
+
+                    <form class="form-inline">
+                        <div class="controls input-append">
+                            <input type="text" placeholder="target uuid" ng-model="uuid"/>
+                        </div>
+                        <div class="controls input-append">
+                            <input type="text" placeholder="message" ng-model="message"/>
+                            <button class="btn" ng-click="triggerServerPush()">trigger server push</button>
+                        </div>
+                    </form>
                     <p>Entries:</p>
                     <ul>
                         <li ng-repeat="entry in entries | orderBy:'id'">

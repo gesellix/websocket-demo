@@ -24,8 +24,13 @@
 
                     $scope.connection = {"uuid": "unknown", "transport": "connecting..." };
                     $scope.entries = $http.get('/entries').success(initialEntriesReceived);
+
+                    var triggerUrl = '/entries/triggerAtmospherePush/';
+                    var getTargetUuid = function () {
+                      return $scope.uuid || $scope.connection.uuid;
+                    };
                     $scope.triggerServerPush = function () {
-                      $http.get('/entries/triggerAtmospherePush/' + $scope.connection.uuid);
+                      $http.get(triggerUrl + getTargetUuid() + "?message=" + $scope.message);
                     }
                   })
       .controller('socketioController', function ($scope, $http, socketio) {
@@ -45,8 +50,13 @@
 
                     $scope.connection = {"uuid": "unknown", "transport": "connecting..." };
                     $scope.entries = $http.get('/entries').success(initialEntriesReceived);
+
+                    var triggerUrl = 'http://localhost:8081/entries/triggerSocketioPush/';
+                    var getTargetUuid = function () {
+                      return $scope.uuid || $scope.connection.uuid;
+                    };
                     $scope.triggerServerPush = function () {
-                      $http.get('http://localhost:8081/entries/triggerSocketioPush/' + $scope.connection.uuid);
+                      $http.get(triggerUrl + getTargetUuid() + "?message=" + $scope.message);
                     }
                   })
 })();
