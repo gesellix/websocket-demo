@@ -32,6 +32,11 @@
       <artifactId>atmosphere-runtime</artifactId>
       <version>${atmosphere.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.pubnub</groupId>
+      <artifactId>pubnub</artifactId>
+      <version>3.5.2</version>
+    </dependency>
 
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
@@ -83,6 +88,18 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
       <version>${spring.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>6.8</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.easytesting</groupId>
+      <artifactId>fest-assert</artifactId>
+      <version>1.4</version>
     </dependency>
   </dependencies>
 

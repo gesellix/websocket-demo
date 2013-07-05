@@ -19,17 +19,20 @@ public class EntriesController {
   @ResponseBody
   @RequestMapping(value = "/entries", method = RequestMethod.GET)
   public String getEntries() throws IOException {
-    return IOUtils.toString(getClass().getResource("testdata-initial.json"));
+    return IOUtils.toString(getClass().getResourceAsStream("testdata-initial.json"));
   }
 
   @ResponseBody
   @RequestMapping(value = "/entries/triggerAtmospherePush/{uuid}", method = RequestMethod.GET)
   public void triggerAtmospherePush(@PathVariable(value = "uuid") String uuid,
                                     @RequestParam("message") String message) throws IOException {
-    String testdata = IOUtils.toString(getClass().getResource("testdata-partial.json"));
+    String testdata = IOUtils.toString(getClass().getResourceAsStream("testdata-partial.json"));
     testdata = testdata.replace("@@MESSAGE@@", message);
 
     AtmosphereResource resource = AtmosphereResourceFactory.getDefault().find(uuid);
+    if (resource == null) {
+      throw new IllegalArgumentException("uuid not found: " + uuid);
+    }
     resource.getBroadcaster().broadcast(testdata, resource);
 
 //    Future<List<Broadcaster>> future = MetaBroadcaster.getDefault().broadcastTo(uuid, testdata);
