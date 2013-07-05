@@ -18,7 +18,8 @@ var server = http.createServer(app);
 var io = socketIo.listen(server);
 
 var appPort = 8081;
-server.listen(appPort);
+var listenAddress = '0.0.0.0';
+server.listen(appPort, listenAddress);
 
 io.sockets.on('connection', function (socket) {
 
@@ -49,4 +50,4 @@ app.get('/*', function (req, res) {
   res.end("404");
 });
 
-console.log('App listening on http://0.0.0.0:' + appPort);
+console.log('App listening on http://' + listenAddress + ':' + appPort);
